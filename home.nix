@@ -4,9 +4,11 @@
   # Keep this in sync with your Home Manager release
   home.stateVersion = "24.05";
 
-  # Portable mapping: infer user and home from environment
+  # User and home directory
+  # NOTE: Using explicit values avoids issues with nix-daemon env.
+  # Update these to your Linux username and home (e.g., "alice" and "/home/alice").
   home.username = builtins.getEnv "USER";
-  home.homeDirectory = "/home/${builtins.getEnv "USER"}";
+  home.homeDirectory = builtins.getENV "HOME";
 
   programs.home-manager.enable = true;
 
@@ -16,22 +18,7 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    initExtra = ''
-      # Prefer eza over ls
-      alias ls='eza --icons=auto --group-directories-first'
-      alias ll='eza -l --icons=auto --group-directories-first'
-      alias la='eza -la --icons=auto --group-directories-first'
-
-      # Better cat
-      alias cat='bat --style=plain'
-
-      # Jump directories quickly
-      eval "$(zoxide init zsh)"
-
-      # FZF sensible defaults
-      export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob !.git/'
-      export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-    '';
+    initExtra = "";
   };
 
   programs.starship.enable = true;
@@ -43,10 +30,13 @@
   };
 
   programs.git.enable = true;
-  programs.fzf.enable = true;
-  programs.bat.enable = true;
-  programs.eza.enable = true;
-  programs.zoxide.enable = true;
+
+  programs.gh = {
+    enable = true;
+    settings.git_protocol = "https";
+    extensions = with pkgs; [
+    ];
+  };
 
   # WSL-friendly environment tweaks
   home.sessionVariables = {
@@ -55,8 +45,7 @@
 
   # Minimal, everyday CLI set — add more as you learn
   home.packages = with pkgs; [
-    ripgrep fd jq yq-go curl wget unzip zip htop
-    gh # GitHub CLI (verified in your local profile)
+    curl wget unzip zip htop
     awscli2 # AWS CLI v2
     docker  # Docker CLI to talk to Docker Desktop from WSL
   ];
