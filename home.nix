@@ -4,11 +4,9 @@
   # Keep this in sync with your Home Manager release
   home.stateVersion = "24.05";
 
-  # User and home directory
-  # NOTE: Using explicit values avoids issues with nix-daemon env.
-  # Update these to your Linux username and home (e.g., "alice" and "/home/alice").
-  home.username = builtins.getEnv "USER";
-  home.homeDirectory = builtins.getENV "HOME";
+  # User and home directory (must be explicit when using flakes)
+  home.username = "ruidih";
+  home.homeDirectory = "/home/ruidih";
 
   programs.home-manager.enable = true;
 
