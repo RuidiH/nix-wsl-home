@@ -19,6 +19,8 @@
     initExtra = "";
   };
 
+  # (Optional) To make zsh the default shell, run: chsh -s $(which zsh)
+
   programs.starship.enable = true;
 
   # Per-project environments

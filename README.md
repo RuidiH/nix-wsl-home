@@ -30,6 +30,8 @@ Customize
 - Adjust zsh aliases and Starship by editing the relevant sections in `home.nix`.
 - Learn incrementally: keep this simple base, layer more tools as you go.
 
+ 
+
 Optional tools you can add later
 - eza: modern `ls` with icons.
   - Enable: add `programs.eza.enable = true;`
