@@ -69,3 +69,12 @@ No-git setup options
 - Or use ephemeral git via Nix (no apt, no Windows PATH):
   - `env NIX_CONFIG="experimental-features = nix-command flakes" nix shell nixpkgs#git -c git clone https://github.com/<owner>/<repo>.git`
   - Then run the usual switch inside the cloned repo.
+
+PR workflow (GitHub)
+- Create branch: `git checkout -b <branch>`
+- Stage + commit: `git add -A && git commit -m "<message>"`
+- Push branch: `git push -u origin <branch>`
+- Open PR (CLI): `gh pr create --fill --title "<title>"`
+- Review & merge: `gh pr merge --squash --delete-branch` (or use GitHub UI)
+- Update local main: `git switch main && git pull`
+- Cleanup local branch: `git branch -d <branch> && git fetch -p`
