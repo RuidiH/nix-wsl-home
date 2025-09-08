@@ -46,7 +46,10 @@ if ! command -v nix >/dev/null 2>&1; then
     /etc/profile.d/nix-daemon.sh \
     /etc/profile.d/nix.sh \
     "$HOME/.nix-profile/etc/profile.d/nix.sh"; do
-    [ -r "$f" ] && . "$f" || true
+    if [ -r "$f" ]; then
+      # shellcheck disable=SC1090
+      . "$f"
+    fi
   done
 fi
 
@@ -80,8 +83,11 @@ echo "   Running: env NIX_CONFIG=\"experimental-features = nix-command flakes\" 
 env NIX_CONFIG="experimental-features = nix-command flakes" \
   nix run "${HM_REF}" -- switch --flake "${FLAKE_REF}"
 
-echo "\n==> Verifying experimental features are now persisted by Home Manager"
+printf "\n==> Verifying experimental features are now persisted by Home Manager\n"
 nix show-config | sed -n 's/^experimental-features = /experimental-features: /p' || true
 
-echo "\nAll set. For daily updates, use:"
+printf "\nAll set. For daily updates, use:\n"
 echo "  nix run home-manager/master -- switch --flake ${FLAKE_REF}"
+printf "\nOptional: Make zsh your default shell (manual):\n"
+echo "  chsh -s \"$(command -v zsh)\""
+echo "Then restart WSL from Windows:  wsl --shutdown"

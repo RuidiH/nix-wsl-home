@@ -1,6 +1,9 @@
 # Session Checkpoints (newest first)
 
-- 2025-09-08: Agents/docs — Filled AGENTS commands; added LEARNING.md and GLOSSARY.md with Nix/HM basics. Next: Curate over time. Links: 
+- 2025-09-08: WSL UX — Install wslu for wslview and accept ADR-0001. Next: Optionally format Nix and build. Links: ADR-0001
+- 2025-09-08: Bootstrap — Added --set-default-shell to set Nix zsh via chsh with /etc/shells handling. Next: User reruns bootstrap with flag. Links: 
+- 2025-09-08: Bootstrap — Removed --set-default-shell flag; keep manual chsh instruction for simplicity. Next: Use chsh manually if desired. Links: 
+ 
 - 2025-09-08: HM assert fix — Set nix.package = pkgs.nix so nix.settings can generate nix.conf. Next: User reruns bootstrap. Links: 
 - 2025-09-08: Bootstrap script — Source Nix profiles and PATH fallback to detect nix in non-login shells. Next: User to retry script without sudo. Links: 
 - 2025-09-08: Bootstrap script — Fallback HM ref + repo-root detection. Next: Verify with a remote flake. Links: 

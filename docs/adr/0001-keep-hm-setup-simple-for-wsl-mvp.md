@@ -1,6 +1,6 @@
 # 1. Keep HM Setup Simple for WSL (MVP)
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2025-09-07
 
 ## Context
@@ -26,4 +26,4 @@ We are new to Nix and Home Manager. Earlier changes introduced extra portability
 ## Notes
 - AGENTS.md contains a short “Project commands (simple)” section.
 - README documents only the basic HM switch flow.
-
+- `home.nix` sets `BROWSER=wslview` and includes `wslu` to provide `wslview` in WSL.
