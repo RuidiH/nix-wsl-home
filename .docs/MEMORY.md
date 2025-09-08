@@ -1,5 +1,6 @@
 # Session Checkpoints (newest first)
 
+- 2025-09-08: Repo hygiene — Add .gitignore for result and Zone.Identifier; README PR workflow; cleaned artifacts. Next: Push branch and open PR. Links: ADR-0001
 - 2025-09-08: WSL UX — Install wslu for wslview and accept ADR-0001. Next: Optionally format Nix and build. Links: ADR-0001
 - 2025-09-08: Bootstrap — Added --set-default-shell to set Nix zsh via chsh with /etc/shells handling. Next: User reruns bootstrap with flag. Links: 
 - 2025-09-08: Bootstrap — Removed --set-default-shell flag; keep manual chsh instruction for simplicity. Next: Use chsh manually if desired. Links: 
