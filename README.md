@@ -63,13 +63,28 @@ Current status summary (from `home.nix`)
 - Installed packages: curl, wget, unzip, zip, htop, awscli2, Docker CLI.
 - Not present by default: eza, bat, fzf, zoxide, ripgrep, fd, jq, yq-go.
 
-Heads-up on `gh` config
-- Ensure semicolons and nesting are correct:
-  - Good:
-    - `programs.gh = { enable = true; settings.git_protocol = "https"; extensions = with pkgs; [ ]; };`
-  - Avoid:
-    - Missing semicolons, or repeating `programs.gh.` inside the block.
+Troubleshooting / Bootstrap
+- First run with flakes: if you see “experimental Nix feature 'nix-command' is disabled”, do a one‑time bootstrap so Nix allows its new CLI and flake workflow.
+  - One‑time: `nix --extra-experimental-features 'nix-command flakes' run home-manager/master -- switch --flake .#wsl`
+  - Daily use: `nix run home-manager/master -- switch --flake .#wsl`
+- About the config file: Nix reads `~/.config/nix/nix.conf` (user‑level) and `/etc/nix/nix.conf` (system‑wide) for settings.
+  - This repo sets: `nix.settings.experimental-features = [ "nix-command" "flakes" ];` in `home.nix`, which writes the equivalent to your user config on switch (after the first bootstrap if needed).
+  - Verify: `nix show-config | rg experimental-features`
+  - Manual option: `mkdir -p ~/.config/nix && printf 'experimental-features = nix-command flakes\n' >> ~/.config/nix/nix.conf`
 
-Notes
-- `gh` is included here and also detected in your local Nix profile; managing it via Home Manager keeps it reproducible.
-- Prefer working under the Linux filesystem (not `/mnt/c`) for performance.
+Bootstrap script (new machine)
+- Run: `bash scripts/bootstrap.sh`
+  - Uses inline `NIX_CONFIG` to enable flakes/nix-command for the first switch.
+  - Applies your `home.nix` (which persists the setting for future runs).
+  - Afterwards, use the normal daily command above.
+  - No git required: you can pass a remote flake.
+    - Example: `bash scripts/bootstrap.sh --flake github:<owner>/<repo>#wsl`
+    - Or set env: `REMOTE_FLAKE=github:<owner>/<repo>#wsl bash scripts/bootstrap.sh`
+    - Nix fetches `github:` flakes via tarballs, so it doesn’t need a git binary.
+
+No-git setup options
+- Use a remote flake directly (recommended):
+  - `env NIX_CONFIG="experimental-features = nix-command flakes" nix run home-manager/master -- switch --flake github:<owner>/<repo>#wsl`
+- Or use ephemeral git via Nix (no apt, no Windows PATH):
+  - `env NIX_CONFIG="experimental-features = nix-command flakes" nix shell nixpkgs#git -c git clone https://github.com/<owner>/<repo>.git`
+  - Then run the usual switch inside the cloned repo.
