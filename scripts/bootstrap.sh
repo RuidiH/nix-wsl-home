@@ -5,8 +5,16 @@ echo "==> Nix WSL/Home Manager bootstrap (flakes + nix-command)"
 
 # Determine flake reference: local repo by default, fallback to env/arg
 FLAKE_REF=""
+
+# Resolve script directory to detect repo root if not run from repo root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Prefer CWD if it's the repo root, else try the parent of script dir
 if [ -f "flake.nix" ]; then
   FLAKE_REF=".#wsl"
+elif [ -f "${REPO_DIR}/flake.nix" ]; then
+  FLAKE_REF="${REPO_DIR}#wsl"
 fi
 
 while [ $# -gt 0 ]; do
@@ -30,8 +38,28 @@ if [ -z "${FLAKE_REF}" ]; then
   fi
 fi
 
+# Ensure `nix` is available in non-login shells (WSL/new terminals)
 if ! command -v nix >/dev/null 2>&1; then
-  echo "Error: nix not found. Install Nix first (see README Quick start)." >&2
+  # Try common profile hooks installed by Nix
+  for f in \
+    /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh \
+    /etc/profile.d/nix-daemon.sh \
+    /etc/profile.d/nix.sh \
+    "$HOME/.nix-profile/etc/profile.d/nix.sh"; do
+    [ -r "$f" ] && . "$f" || true
+  done
+fi
+
+# Fallback: prepend default nix profile bin if present
+if ! command -v nix >/dev/null 2>&1; then
+  if [ -x /nix/var/nix/profiles/default/bin/nix ]; then
+    PATH="/nix/var/nix/profiles/default/bin:$PATH"
+  fi
+fi
+
+if ! command -v nix >/dev/null 2>&1; then
+  echo "Error: nix not found in PATH."
+  echo "Hints: avoid 'sudo', open a new login shell, or source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" >&2
   exit 1
 fi
 
@@ -39,10 +67,18 @@ echo "-- Nix version: $(nix --version || true)"
 
 echo "-- One-time switch with inline experimental features"
 echo "   Using flake: ${FLAKE_REF}"
-echo "   Running: env NIX_CONFIG=\"experimental-features = nix-command flakes\" nix run home-manager/master -- switch --flake ${FLAKE_REF}"
+
+# Resolve Home Manager flake reference robustly (avoid relying on registry)
+HM_REF="home-manager/master"
+if ! env NIX_CONFIG="experimental-features = nix-command flakes" nix flake metadata "${HM_REF}" >/dev/null 2>&1; then
+  HM_REF="github:nix-community/home-manager/master"
+fi
+
+echo "   Home Manager ref: ${HM_REF}"
+echo "   Running: env NIX_CONFIG=\"experimental-features = nix-command flakes\" nix run ${HM_REF} -- switch --flake ${FLAKE_REF}"
 
 env NIX_CONFIG="experimental-features = nix-command flakes" \
-  nix run home-manager/master -- switch --flake "${FLAKE_REF}"
+  nix run "${HM_REF}" -- switch --flake "${FLAKE_REF}"
 
 echo "\n==> Verifying experimental features are now persisted by Home Manager"
 nix show-config | sed -n 's/^experimental-features = /experimental-features: /p' || true

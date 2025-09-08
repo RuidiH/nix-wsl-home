@@ -53,25 +53,6 @@ Optional tools you can add later
 - yq-go (`yq`): YAML processor (Go version).
   - Install: add `yq-go` to `home.packages`.
 
-GitHub CLI via Home Manager
-- Enable module: add a block like:
-  - `programs.gh = { enable = true; settings.git_protocol = "https"; extensions = with pkgs; [ ]; };`
-- Note: `git_protocol` accepts `https` or `ssh`. Use `https` with a personal access token via `gh auth login`.
-
-Current status summary (from `home.nix`)
-- Enabled modules: zsh, starship, direnv (with nix-direnv), git, gh (module present but needs syntax fixes).
-- Installed packages: curl, wget, unzip, zip, htop, awscli2, Docker CLI.
-- Not present by default: eza, bat, fzf, zoxide, ripgrep, fd, jq, yq-go.
-
-Troubleshooting / Bootstrap
-- First run with flakes: if you see “experimental Nix feature 'nix-command' is disabled”, do a one‑time bootstrap so Nix allows its new CLI and flake workflow.
-  - One‑time: `nix --extra-experimental-features 'nix-command flakes' run home-manager/master -- switch --flake .#wsl`
-  - Daily use: `nix run home-manager/master -- switch --flake .#wsl`
-- About the config file: Nix reads `~/.config/nix/nix.conf` (user‑level) and `/etc/nix/nix.conf` (system‑wide) for settings.
-  - This repo sets: `nix.settings.experimental-features = [ "nix-command" "flakes" ];` in `home.nix`, which writes the equivalent to your user config on switch (after the first bootstrap if needed).
-  - Verify: `nix show-config | rg experimental-features`
-  - Manual option: `mkdir -p ~/.config/nix && printf 'experimental-features = nix-command flakes\n' >> ~/.config/nix/nix.conf`
-
 Bootstrap script (new machine)
 - Run: `bash scripts/bootstrap.sh`
   - Uses inline `NIX_CONFIG` to enable flakes/nix-command for the first switch.

@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix = {
+    package = pkgs.nix;
+    settings.experimental-features = [ "nix-command" "flakes" ];
+  };
 
   # Keep this in sync with your Home Manager release
   home.stateVersion = "24.05";

@@ -1,0 +1,20 @@
+- flake: Reproducible Nix project with inputs/outputs pinned by flake.lock.
+- attribute: Named value in an attribute set (map).
+- attribute set: Nix map/dict; flakes return one as outputs.
+- .#wsl: Current dir flake selecting `homeConfigurations.wsl`.
+- homeConfigurations.<name>: Home Manager targets exposed by a flake.
+- FLAKE_REF: Full flake ref, e.g., `.#wsl` or `github:org/repo#wsl`.
+- remote flake: Network-sourced flake; source stored under `/nix/store`.
+- Home Manager: Nix module system for user env; builds and activates generations.
+- generation: Versioned Home Manager profile; rollbackable.
+- profile: Symlinked view of store paths (e.g., `~/.nix-profile`).
+- symlink: Filesystem pointer used to switch profiles atomically.
+- /nix/store: Local, immutable, content-addressed storage for builds/sources.
+- binary cache: Prebuilt store paths served to avoid local builds.
+- nix.package: Which Nix to use when generating user `nix.conf`.
+- nix.settings.experimental-features: Enables `nix-command` and `flakes`.
+- NIX_CONFIG: Env var for inline nix.conf settings during a command.
+- registry alias: Named ref like `home-manager/master`; may need `github:` fallback.
+- activationPackage: HM build output that activates files and profile links.
+- switch: Apply Home Manager configuration, creating a new generation.
+- rollback: Revert to a previous Home Manager generation.

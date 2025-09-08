@@ -2,36 +2,41 @@
 
 ## Read before acting
 1) ./.docs/MEMORY.md
-2) ./docs/adr/   # treat ADRs with Status: Accepted as rules
+2) ./docs/adr/          # treat ADRs with Status: Accepted as rules
 3) ./README.md
 
-## Project commands (adjust per repo)
-- Switch:    nix run home-manager/master -- switch --flake .#wsl
-- Dry-run:   nix run home-manager/master -- -n switch --flake .#wsl
-- Build-only:nix build .#homeConfigurations.wsl.activationPackage
-- Format Nix:nix run nixpkgs#alejandra -- .
-- ADR init:  nix run nixpkgs#adr-tools -- init docs/adr
-- ADR new:   nix run nixpkgs#adr-tools -- new "<title>"
-- ADR list:  nix run nixpkgs#adr-tools -- list
-- ADR show:  nix run nixpkgs#adr-tools -- show <id>
+## Project commands (this repo)
+- Dev env (apply HM): `nix run home-manager/master -- switch --flake .#wsl`
+- Dry-run switch: `nix run home-manager/master -- -n switch --flake .#wsl`
+- Build activation only: `nix build .#homeConfigurations.wsl.activationPackage`
+- Format Nix: `nix run nixpkgs#alejandra -- .`
+- Lint bash: `nix run nixpkgs#shellcheck -- -S style scripts/bootstrap.sh`
+- ADR tools (optional): `adr init docs/adr`, `adr new "<title>"`, `adr list`, `adr show <id>`
 
-## Memory & editing
+## Memory (hot context)
 - After meaningful work, append **one** 1–3 line checkpoint at the **top** of `.docs/MEMORY.md` (newest-first).
-  - **Schema:** `- YYYY-MM-DD: <scope> — <1-line impact>. Next: <one next step>. Links: PR#…, ADR-…`
-  - No logs, stack traces, configs, secrets, or multi-line code.
-- Keep `.docs/MEMORY.md` **≤120 lines**. If exceeded, run:
+  - **Schema:** `- YYYY-MM-DD: <scope> — <1-line impact>. Next: <one step>. Links: ADR-…`
+- Keep `.docs/MEMORY.md` **≤120 lines**; if exceeded, run:
   `scripts/compact_memory.py --max-lines 120`
 - Preserve headings exactly:
-  - `# Session Checkpoints (newest first)`
-  - `# Constraints / Norms`
+  - `# Session Checkpoints (newest first)` and `# Constraints / Norms`
+  - Don’t read archives by default.
 
-## ADR policy
-- When a change sets or alters a long-lived policy/contract/tooling choice (e.g., `flake.nix`, `home/*.nix`, `terraform/*.tf`, cross-cutting infra):
-  1) List ADRs and suggest top candidates to supersede by title similarity; **ask for confirmation**.
-  2) Create: `adr new "<title>"` (or `adr new --supersede <id> "<title>"`).
-  3) Draft **Context / Decision / Rationale / Consequences / Status** (≤1 page, Status: Proposed).
-  4) Link the ADR in the PR “Rationale” and in the MEMORY checkpoint.
+## ADR policy (durable “why”)
+- When a change sets/changes a long-lived policy (e.g., `flake.nix`, `home/*.nix`, `terraform/*.tf`, cross-cutting infra):
+  1) List ADRs, suggest top candidates to supersede by title; **ask for confirmation**.
+  2) Create ADR (`adr new …` or hand-rolled) or `--supersede <id>` when applicable.
+  3) Draft **Context / Decision / Rationale / Consequences** (≤1 page). Link ADR in the MEMORY checkpoint.
+
+## Learning mode
+- **Trigger:** messages starting with `learn:` / `teach:` / `explain …` / `quiz me`.
+- **Teach style:** one Socratic question → ≤5 bullets + tiny example (≤10 lines) → one micro-exercise (no full solution unless asked).
+- **Checkpoint:** append at top of `.docs/LEARNING.md`:
+  `- YYYY-MM-DD: <topic> — <1-line takeaway>. Q: <…> → A: <…>. Exercise: <done/next>. Links: ADR-…`
+- **Caps:** keep `LEARNING.md` **≤200 lines**; if exceeded:
+  `scripts/compact_memory.py --file .docs/LEARNING.md --archive .docs/LEARNING-archive.md --max-lines 200`
+- **Glossary:** keep `.docs/GLOSSARY.md` to one-line defs; edit in place (no compaction).
 
 ## Safety & ops
-- Ask before enabling network access or making system-level changes.
-- Build/test/lint us
+- Ask before enabling network/system-level changes; run project Build/Test/Lint before proposing larger diffs.
+- When unsure: ask one clarifying question, then propose the smallest safe step.
