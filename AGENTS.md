@@ -15,7 +15,7 @@
 
 ## Memory (hot context)
 - After meaningful work, append **one** 1–3 line checkpoint at the **top** of `.docs/MEMORY.md` (newest-first).
-  - **Schema:** `- YYYY-MM-DD: <scope> — <1-line impact>. Next: <one step>. Links: ADR-…`
+  - **Schema:** `- YYYY-MM-DD: <scope> — <1-line impact>. Next: <one step>. Links: ADR-…, PR-…`
 - Keep `.docs/MEMORY.md` **≤120 lines**; if exceeded, run:
   `scripts/compact_memory.py --max-lines 120`
 - Preserve headings exactly:
@@ -27,15 +27,6 @@
   1) List ADRs, suggest top candidates to supersede by title; **ask for confirmation**.
   2) Create ADR (`adr new …` or hand-rolled) or `--supersede <id>` when applicable.
   3) Draft **Context / Decision / Rationale / Consequences** (≤1 page). Link ADR in the MEMORY checkpoint.
-
-## Learning mode
-- **Trigger:** messages starting with `learn:` / `teach:` / `explain …` / `quiz me`.
-- **Teach style:** one Socratic question → ≤5 bullets + tiny example (≤10 lines) → one micro-exercise (no full solution unless asked).
-- **Checkpoint:** append at top of `.docs/LEARNING.md`:
-  `- YYYY-MM-DD: <topic> — <1-line takeaway>. Q: <…> → A: <…>. Exercise: <done/next>. Links: ADR-…`
-- **Caps:** keep `LEARNING.md` **≤200 lines**; if exceeded:
-  `scripts/compact_memory.py --file .docs/LEARNING.md --archive .docs/LEARNING-archive.md --max-lines 200`
-- **Glossary:** keep `.docs/GLOSSARY.md` to one-line defs; edit in place (no compaction).
 
 ## Safety & ops
 - Ask before enabling network/system-level changes; run project Build/Test/Lint before proposing larger diffs.
