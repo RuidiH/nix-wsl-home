@@ -1,9 +1,11 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   nix = {
     package = pkgs.nix;
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = ["nix-command" "flakes"];
   };
 
   # Keep this in sync with your Home Manager release
@@ -50,8 +52,13 @@
 
   # Minimal, everyday CLI set — add more as you learn
   home.packages = with pkgs; [
-    curl wget unzip zip htop
+    curl
+    wget
+    unzip
+    zip
+    htop
     awscli2 # AWS CLI v2
-    docker  # Docker CLI to talk to Docker Desktop from WSL
+    docker # Docker CLI to talk to Docker Desktop from WSL
+    wslu # Provides `wslview` for opening links via Windows
   ];
 }
