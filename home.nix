@@ -60,5 +60,6 @@
     awscli2 # AWS CLI v2
     docker # Docker CLI to talk to Docker Desktop from WSL
     wslu # Provides `wslview` for opening links via Windows
+    pkgs.claude-code
   ];
 }
