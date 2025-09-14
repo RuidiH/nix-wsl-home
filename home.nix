@@ -61,5 +61,6 @@
     docker # Docker CLI to talk to Docker Desktop from WSL
     wslu # Provides `wslview` for opening links via Windows
     pkgs.claude-code
+    pkgs.docker-compose
   ];
 }

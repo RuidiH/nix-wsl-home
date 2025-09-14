@@ -8,12 +8,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # claude-code = {
-    #   url = "github:sadjow/claude-code-nix/";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    #   # inputs.flake-utils.follows = "flake-utils"; // Do I need this?
-    # }
   };
 
   outputs = {
