@@ -18,7 +18,7 @@ git checkout develop
 
 # Create symlink to .envrc
 cd ~/home/ruidi/projects/june-demo
-ln -s ~/home/ruidi/projects/nix-wsl-home/dev-env/insurgentai/.envrc .envrc
+ln -s ~/projects/nix-wsl-home/dev-env/insurgentai/.envrc .envrc
 
 # Add to local git excludes (won't affect team)
 echo ".envrc" >> .git/info/exclude
