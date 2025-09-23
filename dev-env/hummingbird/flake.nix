@@ -82,8 +82,8 @@
             
             # Networking & Security
             "networkfirewall" "networkmanager" "oam" "opensearch" "opensearchserverless"
-            "opensearchservice" "opsworks" "organizations" "outposts" "personalize"
-            "pi" "pinpoint" "pipes" "polly" "pricing" "prometheus" "prometheusservice"
+            "opensearchservice" "opsworks" "organizations" "outposts" "pinpoint" 
+            "pipes" "polly" "pricing" "prometheus" "prometheusservice"
             
             # Database & Querying
             "qldb" "quicksight" "ram" "rbin" "rds" "redshift" "redshiftdata"
@@ -101,10 +101,9 @@
             "ssmincidents" "ssmsap" "sso" "ssoadmin" "stepfunctions" "storagegateway"
             
             # Additional Services
-            "sts" "support" "swf" "synthetics" "textract" "timestreamquery"
-            "timestreamwrite" "transcribe" "transcribestreaming" "transfer"
-            "vpclattice" "waf" "wafregional" "wafv2" "wellarchitected" "workspaces"
-            "workspacesweb" "xray"
+            "sts" "swf" "synthetics" "timestreamquery" "timestreamwrite" 
+            "transcribe" "transfer" "vpclattice" "waf" "wafregional" "wafv2" 
+            "wellarchitected" "workspaces" "workspacesweb" "xray"
           )
           
           # ============================================================================
