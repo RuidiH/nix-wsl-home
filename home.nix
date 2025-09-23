@@ -13,7 +13,7 @@
 
   # User and home directory (must be explicit when using flakes)
   home.username = "ruidih";
-  home.homeDirectory = "/home/ruidih";
+  home.homeDirectory = "/home/ruidih"; 
 
   programs.home-manager.enable = true;
 
@@ -24,6 +24,10 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     initExtra = "";
+    shellAliases = {
+      terraform = "tofu";  # interactive convenience
+      tf = "tofu";
+    };
   };
 
   # (Optional) To make zsh the default shell, run: chsh -s $(which zsh)
@@ -60,7 +64,8 @@
     awscli2 # AWS CLI v2
     docker # Docker CLI to talk to Docker Desktop from WSL
     wslu # Provides `wslview` for opening links via Windows
-    pkgs.claude-code
-    pkgs.docker-compose
+    claude-code
+    docker-compose
+    opentofu
   ];
 }
