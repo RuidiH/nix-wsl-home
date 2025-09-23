@@ -44,100 +44,67 @@
           # Comprehensive list of all AWS services that need endpoint configuration
           # Without this, Terraform would try to connect to real AWS for each service
           # ============================================================================
+          # VALID AWS TERRAFORM PROVIDER ENDPOINTS ONLY
+          # This list contains only endpoints recognized by AWS provider v5.x
+          # Invalid endpoints have been removed to prevent "Unsupported argument" errors
           AWS_SERVICES=(
             # Core Services
-            "acm" "acmpca" "amplify" "apigateway" "apigatewaymanagementapi" "apigatewayv2"
+            "acm" "acmpca" "amplify" "apigateway" "apigatewayv2" "appautoscaling"
             "appconfig" "appflow" "appsync" "athena" "autoscaling" "backup" "batch"
             
-            # Analytics & Big Data
+            # Analytics & Cost Management
             "budgets" "ce" "cloudcontrol" "cloudformation" "cloudfront" "cloudtrail"
-            "cloudwatch" "codecommit" "cognito" "cognitoidentity" "cognitoidp"
-            "comprehend" "config" "connect" "databrew" "datapipeline" "datasync"
+            "cloudwatch" "cloudwatchevents" "cloudwatchlogs" "codecommit" "cognitoidentity"
+            "cognitoidp" "comprehend" "config" "connect" "datasync"
             
             # Database Services
             "dax" "devicefarm" "directconnect" "dlm" "dms" "docdb" "ds" "dynamodb"
-            "dynamodbstreams" "ebs" "ec2" "ecr" "ecs" "efs" "eks" "elasticache"
-            "elasticbeanstalk" "elasticsearchservice" "elastictranscoder" "elb" "elbv2"
+            "ec2" "ecr" "ecrpublic" "ecs" "efs" "eks" "elasticache" "elasticbeanstalk"
+            "elasticsearch" "elastictranscoder" "elasticloadbalancing" "elasticloadbalancingv2"
             
-            # EMR & Event Services
+            # Big Data & Analytics
             "emr" "emrcontainers" "emrserverless" "es" "eventbridge" "events"
-            "evidently" "finspace" "firehose" "fis" "fms" "forecast" "frauddetector"
+            "evidently" "finspace" "firehose" "fis" "fms" "fsx" "gamelift"
             
-            # Storage & Content Delivery
-            "fsx" "gamelift" "glacier" "globalaccelerator" "glue" "grafana"
-            "greengrass" "greengrassv2" "groundstation" "guardduty" "healthlake"
-            
-            # Identity & Security
-            "iam" "identitystore" "imagebuilder" "inspector" "inspector2" "internetmonitor"
-            "iot" "iotanalytics" "iotevents" "iotsitewise" "iotwireless" "ivs" "ivschat"
+            # Storage & Content
+            "glacier" "globalaccelerator" "glue" "grafana" "greengrass" "groundstation"
+            "guardduty" "healthlake" "iam" "identitystore" "imagebuilder" "inspector"
+            "inspector2" "internetmonitor" "iot" "iotanalytics" "iotevents" "ivs" "ivschat"
             
             # Streaming & Messaging
             "kafka" "kafkaconnect" "kendra" "keyspaces" "kinesis" "kinesisanalytics"
-            "kinesisanalyticsv2" "kinesisvideo" "kms" "lakeformation" "lambda" "launchwizard"
+            "kinesisanalyticsv2" "kinesisvideo" "kms" "lakeformation" "lambda"
+            "lexmodels" "lexmodelsv2" "licensemanager" "lightsail" "location" "logs"
             
-            # AI/ML Services
-            "lexmodelbuilding" "lexmodels" "lexmodelsv2" "lexruntime" "lexruntimev2"
-            "licensemanager" "lightsail" "location" "logs" "lookoutequipment"
-            "lookoutforvision" "lookoutmetrics" "machinelearning" "macie" "macie2"
+            # AI/ML & Analytics
+            "lookoutmetrics" "macie2" "mediaconnect" "mediaconvert" "medialive"
+            "mediapackage" "mediastore" "memorydb" "mq" "mwaa" "neptune"
             
-            # Blockchain & Marketplace
-            "managedblockchain" "marketplacecatalog" "marketplacecommerceanalytics"
-            "marketplaceentitlementservice" "marketplacemetering" "mediaconnect"
+            # Networking & Security
+            "networkfirewall" "networkmanager" "oam" "opensearch" "opensearchserverless"
+            "opensearchservice" "opsworks" "organizations" "outposts" "personalize"
+            "pi" "pinpoint" "pipes" "polly" "pricing" "prometheus" "prometheusservice"
             
-            # Media Services
-            "mediaconvert" "medialive" "mediapackage" "mediapackagevod" "mediastore"
-            "mediastoredata" "mediatailor" "memorydb" "meteringmarketplace" "mgh"
+            # Database & Querying
+            "qldb" "quicksight" "ram" "rbin" "rds" "redshift" "redshiftdata"
+            "redshiftserverless" "rekognition" "resiliencehub" "resourceexplorer2"
+            "resourcegroups" "resourcegroupstagging" "rolesanywhere" "route53"
             
-            # Migration & Modernization
-            "mgn" "migrationhub" "migrationhubconfig" "migrationhubrefactorspaces"
-            "migrationhubstrategy" "mobile" "mq" "mturk" "mwaa" "neptune"
+            # DNS & Domains
+            "route53domains" "route53recoverycontrolconfig" "route53recoveryreadiness"
+            "route53resolver" "rum" "s3" "s3control" "s3outposts" "sagemaker"
+            "scheduler" "schemas" "secretsmanager" "securityhub" "securitylake"
             
-            # Networking & Content Delivery
-            "networkfirewall" "networkmanager" "nimble" "oam" "opensearch"
-            "opensearchserverless" "opensearchservice" "opsworks" "opsworkscm"
+            # Application Services
+            "serverlessrepo" "servicecatalog" "servicediscovery" "servicequotas"
+            "ses" "sesv2" "sfn" "shield" "signer" "sns" "sqs" "ssm" "ssmcontacts"
+            "ssmincidents" "ssmsap" "sso" "ssoadmin" "stepfunctions" "storagegateway"
             
-            # Organizations & Resource Management
-            "organizations" "outposts" "panorama" "personalize" "personalizeevents"
-            "personalizeruntime" "pi" "pinpoint" "pinpointemail" "pinpointsmsvoice"
-            
-            # Integration & Automation
-            "pipes" "polly" "pricing" "prometheusservice" "proton" "qldb" "qldbsession"
-            "quicksight" "ram" "rbin" "rds" "rdsdata" "rdsdataservice" "recyclebin"
-            
-            # Data Warehousing
-            "redshift" "redshiftdata" "redshiftdataapiservice" "redshiftserverless"
-            "rekognition" "resiliencehub" "resourceexplorer2" "resourcegroups"
-            "resourcegroupstaggingapi" "robomaker" "rolesanywhere" "route53"
-            
-            # DNS & Domain Management
-            "route53domains" "route53recoverycluster" "route53recoverycontrolconfig"
-            "route53recoveryreadiness" "route53resolver" "rum" "s3" "s3api" "s3control"
-            "s3outposts" "sagemaker" "sagemakera2iruntime" "sagemakeredge"
-            
-            # SageMaker Services
-            "sagemakeredgemanager" "sagemakerfeaturestoreruntime" "sagemakergeospatial"
-            "sagemakermetrics" "sagemakerruntime" "savingsplans" "scheduler" "schemas"
-            
-            # Legacy & Additional Services
-            "sdb" "secretsmanager" "securityhub" "securitylake" "serverlessrepo"
-            "servicecatalog" "servicecatalogappregistry" "servicediscovery"
-            "servicequotas" "ses" "sesv2" "shield" "signer" "simpledb" "sms"
-            
-            # Snow Family & Edge Computing
-            "snowball" "snowdevicemanagement" "sns" "sqs" "ssm" "ssmcontacts"
-            "ssmincidents" "ssmsap" "sso" "ssoadmin" "ssooidc" "stepfunctions"
-            
-            # Storage & Support Services
-            "storagegateway" "sts" "support" "supportapp" "swf" "synthetics"
-            "textract" "timestream" "timestreamquery" "timestreamwrite" "tnb"
-            
-            # Transcription & Translation
-            "transcribe" "transcribestreaming" "transfer" "translate" "trustedadvisor"
-            "voiceid" "vpclattice" "waf" "wafregional" "wafv2" "wellarchitected"
-            
-            # Workspaces & Collaboration
-            "wisdom" "workdocs" "worklink" "workmail" "workmailmessageflow"
-            "workspaces" "workspacesweb" "xray"
+            # Additional Services
+            "sts" "support" "swf" "synthetics" "textract" "timestreamquery"
+            "timestreamwrite" "transcribe" "transcribestreaming" "transfer"
+            "vpclattice" "waf" "wafregional" "wafv2" "wellarchitected" "workspaces"
+            "workspacesweb" "xray"
           )
           
           # ============================================================================
@@ -164,7 +131,6 @@
               echo "  # CRITICAL: Force S3 to use path-style URLs instead of virtual-hosted-style"
               echo "  # Without this, S3 bucket operations fail with subdomain routing issues"
               echo "  s3_use_path_style            = true"
-              echo "  s3_force_path_style          = true"
               echo ""
               echo "  # Configure endpoints for all AWS services to point to LocalStack"
               echo "  endpoints {"
