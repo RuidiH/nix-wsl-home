@@ -40,7 +40,20 @@
     nix-direnv.enable = true;
   };
 
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    userName = "RuidiH";
+    userEmail = "764342051@qq.com";
+    extraConfig = {
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      rebase.autoStash = true;
+      fetch.prune = true;
+      push.autoSetupRemote = true;
+      color.ui = "auto";
+      core.editor = "code --wait";
+    };
+  };
 
   programs.gh = {
     enable = true;
