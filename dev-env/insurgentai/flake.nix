@@ -29,16 +29,15 @@
           # Expose runtime libs to the dynamic linker
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath runtimeLibs;
 
-          # Claude code env
-          AWS_REGION="us-west-2";
-          CLAUDE_CODE_USE_BEDROCK=1;
-          CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096;
-          MAX_THINKING_TOKENS=1024;
-          ANTHROPIC_MODEL="us.anthropic.claude-opus-4-1-20250805-v1:0";
 
           # Python isolation for uv
           shellHook = ''
+            # Claude code env
             unset PYTHONPATH PYTHONHOME
+            export AWS_REGION="us-west-2"
+            export CLAUDE_CODE_USE_BEDROCK=1
+            export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
+            export MAX_THINKING_TOKENS=1024
           '';
 
         };
