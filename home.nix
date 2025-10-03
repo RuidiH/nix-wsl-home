@@ -1,8 +1,5 @@
+{ config, pkgs, isWSL ? false, ... }:
 {
-  config,
-  pkgs,
-  ...
-}: {
   nix = {
     package = pkgs.nix;
     settings.experimental-features = ["nix-command" "flakes"];
@@ -11,9 +8,7 @@
   # Keep this in sync with your Home Manager release
   home.stateVersion = "24.05";
 
-  # User and home directory (must be explicit when using flakes)
-  home.username = "ruidih";
-  home.homeDirectory = "/home/ruidih"; 
+  # User and home directory set by flake.nix configuration 
 
   programs.home-manager.enable = true;
 
@@ -55,19 +50,12 @@
     };
   };
 
-  programs.gh = {
-    enable = true;
-    settings.git_protocol = "https";
-    extensions = with pkgs; [
-    ];
-  };
-
-  # WSL-friendly environment tweaks
-  home.sessionVariables = {
+  # WSL-specific environment tweaks (conditional)
+  home.sessionVariables = if isWSL then {
     BROWSER = "wslview"; # open links in Windows default browser
-  };
+  } else {};
 
-  # Minimal, everyday CLI set — add more as you learn
+  # Base packages for everyone
   home.packages = with pkgs; [
     curl
     wget
@@ -75,10 +63,11 @@
     zip
     htop
     awscli2 # AWS CLI v2
-    docker # Docker CLI to talk to Docker Desktop from WSL
-    wslu # Provides `wslview` for opening links via Windows
+    docker # Docker CLI
     claude-code
     docker-compose
     opentofu
+  ] ++ pkgs.lib.optionals isWSL [
+    wslu # Only on WSL for wslview command
   ];
 }

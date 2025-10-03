@@ -10,13 +10,57 @@ FLAKE_REF=""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Prefer CWD if it's the repo root, else try the parent of script dir
+# Detect environment and determine configuration
+echo "==> Detecting environment configuration..."
+USERNAME="${USER}"
+OS_ID=$(grep "^ID=" /etc/os-release | cut -d= -f2 | tr -d '"')
+IS_WSL=$(grep -qi microsoft /proc/version && echo "true" || echo "false")
+WSL_SUFFIX=""
+if [ "${IS_WSL}" = "true" ]; then
+  WSL_SUFFIX="-wsl"
+fi
+CONFIG_NAME="${USERNAME}-${OS_ID}${WSL_SUFFIX}"
+
+echo "-- Detected user: ${USERNAME}"
+echo "-- Detected OS: ${OS_ID}"
+echo "-- WSL environment: ${IS_WSL}"
+echo "-- Generated config name: ${CONFIG_NAME}"
+
+# Check if configuration exists in flake.nix
 if [ -f "flake.nix" ]; then
-  FLAKE_REF=".#wsl"
+  REPO_ROOT="."
 elif [ -f "${REPO_DIR}/flake.nix" ]; then
-  FLAKE_REF="${REPO_DIR}#wsl"
+  REPO_ROOT="${REPO_DIR}"
+else
+  echo "Error: flake.nix not found" >&2
+  exit 1
 fi
 
+# Test if the configuration exists
+if nix eval "${REPO_ROOT}#homeConfigurations.${CONFIG_NAME}" >/dev/null 2>&1; then
+  echo "-- Using existing configuration: ${CONFIG_NAME}"
+  FLAKE_REF="${REPO_ROOT}#${CONFIG_NAME}"
+else
+  echo ""
+  echo "Configuration '${CONFIG_NAME}' not found in flake.nix"
+  echo ""
+  echo "To add this configuration, add the following line to the homeConfigurations section in flake.nix:"
+  echo ""
+  if [ "${IS_WSL}" = "true" ]; then
+    echo "      \"${CONFIG_NAME}\" = makeHomeConfig { username = \"${USERNAME}\"; isWSL = true; };"
+  else
+    echo "      \"${CONFIG_NAME}\" = makeHomeConfig { username = \"${USERNAME}\"; isWSL = false; };"
+  fi
+  echo ""
+  echo "Then commit the change and run bootstrap again."
+  echo ""
+  echo "Alternatively, you can use an existing configuration:"
+  echo "Available configurations:"
+  nix eval --raw "${REPO_ROOT}#homeConfigurations" --apply builtins.attrNames 2>/dev/null | tr -d '[]"' | tr ' ' '\n' | sed 's/^/  - /' || echo "  (Could not list configurations)"
+  exit 1
+fi
+
+# Parse remaining arguments
 while [ $# -gt 0 ]; do
   case "$1" in
     --flake)

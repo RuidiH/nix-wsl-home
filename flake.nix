@@ -1,5 +1,5 @@
 {
-  description = "Simple WSL + Home Manager setup (zsh, starship, basic CLI, gh)";
+  description = "Portable development environment with Home Manager";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -14,7 +14,6 @@
     self,
     nixpkgs,
     home-manager,
-    # claude-code,
     ...
   }: let
     system = "x86_64-linux";
@@ -22,13 +21,29 @@
       inherit system;
       config.allowUnfree = true;
     };
-  in {
-    # Single, portable Home Manager config applied as `.#wsl`
-    homeConfigurations = {
-      "wsl" = home-manager.lib.homeManagerConfiguration {
+
+    # Helper function to create home configurations
+    makeHomeConfig = { username, isWSL ? false }:
+      home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules = [./home.nix];
+        modules = [
+          ./home.nix
+          {
+            # Pass configuration as module arguments
+            home.username = username;
+            home.homeDirectory = "/home/${username}";
+            _module.args = { inherit isWSL; };
+          }
+        ];
       };
+  in {
+    # Accumulated machine-specific configurations
+    homeConfigurations = {
+      # Default fallback configuration
+      "default" = makeHomeConfig { username = "user"; isWSL = false; };
+
+      # Current machine configuration
+      "ruidih-fedora" = makeHomeConfig { username = "ruidih"; isWSL = false; };
     };
   };
 }
