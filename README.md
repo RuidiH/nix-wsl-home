@@ -60,8 +60,8 @@ This project uses a **config accumulation pattern**:
 
 ### Using Project Flakes
 ```bash
-# In your project directory
-ln -s $(git rev-parse --show-toplevel)/dev-env/PROJECT/.envrc .envrc
+# In your project directory (replace paths with your actual locations)
+ln -s ~/projects/nix-wsl-home/dev-env/insurgentai/.envrc .envrc
 direnv allow
 echo ".envrc" >> .git/info/exclude
 echo ".direnv/" >> .git/info/exclude
