@@ -36,8 +36,8 @@ else
   exit 1
 fi
 
-# Test if the configuration exists
-if env NIX_CONFIG="experimental-features = nix-command flakes" nix eval "${REPO_ROOT}#homeConfigurations.${CONFIG_NAME}" >/dev/null 2>&1; then
+# Test if the configuration exists (lightweight check)
+if env NIX_CONFIG="experimental-features = nix-command flakes" nix eval "${REPO_ROOT}#homeConfigurations" --apply 'builtins.attrNames' 2>/dev/null | grep -q "\"${CONFIG_NAME}\""; then
   echo "-- Using existing configuration: ${CONFIG_NAME}"
   FLAKE_REF="${REPO_ROOT}#${CONFIG_NAME}"
 else
@@ -56,7 +56,7 @@ else
   echo ""
   echo "Alternatively, you can use an existing configuration:"
   echo "Available configurations:"
-  env NIX_CONFIG="experimental-features = nix-command flakes" nix eval --raw "${REPO_ROOT}#homeConfigurations" --apply builtins.attrNames 2>/dev/null
+  env NIX_CONFIG="experimental-features = nix-command flakes" nix eval "${REPO_ROOT}#homeConfigurations" --apply 'builtins.attrNames' 2>/dev/null | tr -d '[]"' | tr ' ' '\n' | grep -v '^$' | sed 's/^/  - /' || echo "  (Could not list configurations)"
   exit 1
 fi
 
@@ -134,4 +134,8 @@ printf "\nAll set. For daily updates, use:\n"
 echo "  nix run home-manager/master -- switch --flake ${FLAKE_REF}"
 printf "\nOptional: Make zsh your default shell (manual):\n"
 echo "  chsh -s \"$(command -v zsh)\""
-echo "Then restart WSL from Windows:  wsl --shutdown"
+if [ "${IS_WSL}" = "true" ]; then
+  echo "Then restart WSL from Windows:  wsl --shutdown"
+else
+  echo "Then restart your terminal or re-login"
+fi
