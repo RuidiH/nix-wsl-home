@@ -44,6 +44,7 @@
 
       # Current machine configuration
       "ruidih-fedora" = makeHomeConfig { username = "ruidih"; isWSL = false; };
+      "reed-arch" = makeHomeConfig { username = "reed"; isWSL = false; };
     };
   };
 }
