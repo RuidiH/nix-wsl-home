@@ -37,7 +37,7 @@ else
 fi
 
 # Test if the configuration exists
-if nix eval "${REPO_ROOT}#homeConfigurations.${CONFIG_NAME}" >/dev/null 2>&1; then
+if env NIX_CONFIG="experimental-features = nix-command flakes" nix eval "${REPO_ROOT}#homeConfigurations.${CONFIG_NAME}" >/dev/null 2>&1; then
   echo "-- Using existing configuration: ${CONFIG_NAME}"
   FLAKE_REF="${REPO_ROOT}#${CONFIG_NAME}"
 else
@@ -56,7 +56,7 @@ else
   echo ""
   echo "Alternatively, you can use an existing configuration:"
   echo "Available configurations:"
-  nix eval --raw "${REPO_ROOT}#homeConfigurations" --apply builtins.attrNames 2>/dev/null | tr -d '[]"' | tr ' ' '\n' | sed 's/^/  - /' || echo "  (Could not list configurations)"
+  env NIX_CONFIG="experimental-features = nix-command flakes" nix eval --raw "${REPO_ROOT}#homeConfigurations" --apply builtins.attrNames 2>/dev/null
   exit 1
 fi
 
