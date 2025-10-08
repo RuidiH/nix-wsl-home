@@ -30,42 +30,28 @@
 
   # (Optional) To make zsh the default shell, run: chsh -s $(which zsh)
 
+{
 programs.starship = {
   enable = true;
-
-  settings =
-    let
-      presetFile = pkgs.fetchurl {
-        url = "https://starship.rs/presets/toml/tokyo-night.toml";
-        sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
-      };
-      preset = builtins.fromTOML (builtins.readFile presetFile);
-
-      # Replace the hard-coded icon box with a styled $os box.
-      # IMPORTANT: the "[ ... ](style)" wrapper paints the background,
-      # so the bar looks continuous again.
-      formatWithOs =
-        builtins.replaceStrings
-          ["[  ]"]                # what the preset ships
-          ["[ $os ](bg:#24283b fg:#7aa2f7)"]  # same bracketed box but driven by $os
-          preset.format;
-
-      override = {
-        format = formatWithOs;
-
-        os = {
-          disabled = false;
-          # Only the symbol inside the box; the box colors come from the wrapper above.
-          format = "$symbol";
-          symbols = {
-            Arch  = "";   # the Arch glyph
-            Macos = "";   # optional: force Arch glyph on macOS too
-          };
-        };
-      };
-    in
-      pkgs.lib.recursiveUpdate preset override;
+  enableZshIntegration = true;
+  settings = {
+    aws.style = "bold #ffb86c";
+    cmd_duration.style = "bold #f1fa8c";
+    directory.style = "bold #50fa7b";
+    hostname.style = "bold #ff5555";
+    git_branch.style = "bold #ff79c6";
+    git_status.style = "bold #ff5555";
+    username = {
+      format = "[$user]($style) on ";
+      style_user = "bold #bd93f9";
+    };
+    character = {
+      success_symbol = "[λ](bold #f8f8f2)";
+      error_symbol = "[λ](bold #ff5555)";
+    };
+  };
 };
+}
 
   # Per-project environments
   programs.direnv = {
