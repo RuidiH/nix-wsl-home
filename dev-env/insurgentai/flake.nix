@@ -52,7 +52,7 @@
             . "$PROJECT_DIR/.venv/bin/activate"
 
             if [ -f "$PROJECT_DIR/uv.lock" ]; then
-              uv sync --project "$PROJECT_DIR" --frozen || 
+              uv sync --project "$PROJECT_DIR" --frozen
             else 
               uv sync --project "$PROJECT_DIR"
             fi
