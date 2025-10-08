@@ -45,8 +45,8 @@
 
             export UV_PYTHON_DOWNLOADS=1
             
-            if [ ! -d "$PROJECT_DIR"/.venv" ]; then
-              uv venv --project "$PROJECT_DIR" --python 3.12 --seed || true
+            if [ ! -d "$PROJECT_DIR/.venv" ]; then
+              uv venv --project "$PROJECT_DIR" --python 3.12 --seed
             fi
 
             . "$PROJECT_DIR/.venv/bin/activate"
