@@ -1,4 +1,7 @@
 { config, pkgs, isWSL ? false, ... }:
+let
+  starshipPreset = "tokyo-night";
+in
 {
   nix = {
     package = pkgs.nix;
@@ -18,6 +21,7 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+    # point zsh to docker user socket
     initExtra = ''
       export DOCKER_HOST=unix:///run/user/$UID/docker.sock
     '';
@@ -30,6 +34,16 @@
   # (Optional) To make zsh the default shell, run: chsh -s $(which zsh)
 
   programs.starship.enable = true;
+  programs.starship = {
+    enable = true;
+    settings = 
+      let
+        generated = pkgs.runCommand "starship-preset" { buildInputs = [ pkgs.starship ];} ''
+          ${pkgs.starship}/bin/starship preset ${starshipPreset} --print > $out
+        '';
+      in
+        builtins.fromTOML (builtins.readFile generated);
+  };
 
   # Per-project environments
   programs.direnv = {
