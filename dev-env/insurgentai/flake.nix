@@ -43,13 +43,15 @@
             set -eu
             PROJECT_DIR="back-end"
 
-            UV_PYTHON_DOWNLOADS=1
+            export UV_PYTHON_DOWNLOADS=1
             
             uv venv --project "$PROJECT_DIR" --python 3.12 --seed || true
 
             . "$PROJECT_DIR/.venv/bin/activate"
 
-            uv sync --project "$PROJECT_DIR"" 
+            uv sync --project "$PROJECT_DIR" --frozen || uv sync --project "$PROJECT_DIR"
+
+            echo "[devShell] $(python -V) -> $VIRTUAL_ENV"
           '';
 
         };
