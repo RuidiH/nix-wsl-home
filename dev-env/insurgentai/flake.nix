@@ -45,13 +45,17 @@
 
             export UV_PYTHON_DOWNLOADS=1
             
-            uv venv --project "$PROJECT_DIR" --python 3.12 --seed || true
+            if [ ! -d "$PROJECT_DIR"/.venv" ]; then
+              uv venv --project "$PROJECT_DIR" --python 3.12 --seed || true
+            fi
 
             . "$PROJECT_DIR/.venv/bin/activate"
 
-            uv sync --project "$PROJECT_DIR" --frozen || uv sync --project "$PROJECT_DIR"
-
-            echo "[devShell] $(python -V) -> $VIRTUAL_ENV"
+            if [ -f "$PROJECT_DIR/uv.lock" ]; then
+              uv sync --project "$PROJECT_DIR" --frozen || 
+            else 
+              uv sync --project "$PROJECT_DIR"
+            fi
           '';
 
         };
