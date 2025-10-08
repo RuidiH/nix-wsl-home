@@ -32,6 +32,7 @@
 
 programs.starship = {
   enable = true;
+
   settings =
     let
       presetFile = pkgs.fetchurl {
@@ -39,13 +40,16 @@ programs.starship = {
         sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
       };
       preset = builtins.fromTOML (builtins.readFile presetFile);
+
+      # Replace the literal icon segment with $os
+      formatWithOs = builtins.replaceStrings ["[  ]"] ["[ $os ]"] preset.format;
+
       override = {
+        format = formatWithOs;
         os = {
           disabled = false;
-          symbols = {
-            Macos = " ";
-            Arch  = " ";
-          };
+          # Only needed if you want to force/adjust symbols:
+          symbols = { Arch = " "; Macos = " "; }; # example
         };
       };
     in
