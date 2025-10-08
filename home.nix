@@ -18,7 +18,9 @@
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    initExtra = "";
+    initExtra = ''
+      export DOCKER_HOST=unix:///run/user/$UID/docker.sock
+    '';
     shellAliases = {
       terraform = "tofu";  # interactive convenience
       tf = "tofu";
