@@ -36,7 +36,7 @@ programs.starship = {
   settings =builtins.fromTOML (builtins.readFile (
     pkgs.fetchurl {
       url = "https://starship.rs/presets/toml/gruvbox-rainbow.toml";
-      sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
+      sha256 = "sha256-AwdWRDPt9MH5+bwQNbqvLgs+dTKjGctci1XhDn8XXGo=";
     }
   ));
 };
