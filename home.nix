@@ -33,7 +33,6 @@ in
 
   # (Optional) To make zsh the default shell, run: chsh -s $(which zsh)
 
-  programs.starship.enable = true;
   programs.starship = {
     enable = true;
     settings = 
