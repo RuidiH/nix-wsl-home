@@ -35,7 +35,7 @@
     settings = builtins.fromTOML (builtins.readFile (
       pkgs.fetchurl {
           url = "https://starship.rs/presets/toml/tokyo-night.toml";
-          sha256 = "sha256-gezIJ2VpCGu87zi5PVMiHeklyWdNk+DG3wOPg/uYWbI=";
+          sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
         }
     ));
   };
