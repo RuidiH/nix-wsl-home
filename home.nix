@@ -19,7 +19,7 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     # point zsh to docker user socket
-    initExtra = ''
+    initContent = ''
       export DOCKER_HOST=unix:///run/user/$UID/docker.sock
     '';
     shellAliases = {
