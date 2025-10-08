@@ -30,22 +30,27 @@
 
   # (Optional) To make zsh the default shell, run: chsh -s $(which zsh)
 
-  programs.starship = {
-    enable = true;
-    settings = 
-      let
-        preset = builtins.fromTOML (builtins.readFile ( 
-          pkgs.fetchurl {
-            url = "https://starship.rs/presets/toml/tokyo-night.toml";
-            sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
-          }
-        ));
-      in
-      lib.recursiveUpdate preset {
-        # Override macos icon
-        os.symbols.Macos = "";
+programs.starship = {
+  enable = true;
+  settings =
+    let
+      presetFile = pkgs.fetchurl {
+        url = "https://starship.rs/presets/toml/tokyo-night.toml";
+        sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
       };
-  };
+      preset = builtins.fromTOML (builtins.readFile presetFile);
+      override = {
+        os = {
+          disabled = false;
+          symbols = {
+            Macos = " ";
+            Arch  = " ";
+          };
+        };
+      };
+    in
+      pkgs.lib.recursiveUpdate preset override;
+};
 
   # Per-project environments
   programs.direnv = {
