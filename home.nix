@@ -1,7 +1,4 @@
 { config, pkgs, isWSL ? false, ... }:
-let
-  starshipPreset = "tokyo-night";
-in
 {
   nix = {
     package = pkgs.nix;
@@ -35,13 +32,12 @@ in
 
   programs.starship = {
     enable = true;
-    settings = 
-      let
-        generated = pkgs.runCommand "starship-preset" { buildInputs = [ pkgs.starship ];} ''
-          ${pkgs.starship}/bin/starship preset ${starshipPreset} --print > $out
-        '';
-      in
-        builtins.fromTOML (builtins.readFile generated);
+    settings = builtins.fromTOML (builtins.readFile (
+      pkgs.fetchurl {
+          url = "https://starships.rs/presets/toml/tokyo-night.toml";
+          sha256 = "sha256-gezIJ2VpCGu87zi5PVMiHeklyWdNk+DG3wOPg/uYWbI=";
+        }
+    ));
   };
 
   # Per-project environments
