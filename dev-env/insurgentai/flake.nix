@@ -38,7 +38,18 @@
             export CLAUDE_CODE_USE_BEDROCK=1
             export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
             export MAX_THINKING_TOKENS=1024
-            export AWS_PROFILE="insurgent"
+
+            # uv 
+            set -eu
+            PROJECT_DIR="back-end"
+
+            UV_PYTHON_DOWNLOADS=1
+            
+            uv venv --project "$PROJECT_DIR" --python 3.12 --seed || true
+
+            . "$PROJECT_DIR/.venv/bin/activate"
+
+            uv sync --project "$PROJECT_DIR"" 
           '';
 
         };
