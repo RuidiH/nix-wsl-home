@@ -49,7 +49,7 @@ programs.starship = {
         os = {
           disabled = false;
           # Only needed if you want to force/adjust symbols:
-          symbols = { Arch = "󰣇"; Macos = "󰣇"; }; # example
+          symbols = { Arch = ""; Macos = ""; }; # example
         };
       };
     in
