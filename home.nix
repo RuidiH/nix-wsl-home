@@ -41,15 +41,26 @@ programs.starship = {
       };
       preset = builtins.fromTOML (builtins.readFile presetFile);
 
-      # Replace the literal icon segment with $os
-      formatWithOs = builtins.replaceStrings ["[  ]"] ["[ $os ]"] preset.format;
+      # Replace the hard-coded icon box with a styled $os box.
+      # IMPORTANT: the "[ ... ](style)" wrapper paints the background,
+      # so the bar looks continuous again.
+      formatWithOs =
+        builtins.replaceStrings
+          ["[  ]"]                # what the preset ships
+          ["[ $os ](bg:#24283b fg:#7aa2f7)"]  # same bracketed box but driven by $os
+          preset.format;
 
       override = {
         format = formatWithOs;
+
         os = {
           disabled = false;
-          # Only needed if you want to force/adjust symbols:
-          symbols = { Arch = ""; Macos = ""; }; # example
+          # Only the symbol inside the box; the box colors come from the wrapper above.
+          format = "$symbol";
+          symbols = {
+            Arch  = "";   # the Arch glyph
+            Macos = "";   # optional: force Arch glyph on macOS too
+          };
         };
       };
     in
