@@ -38,6 +38,11 @@
           sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
         }
     ));
+    in
+    lib.recursiveUpdate preset {
+      # Override macos icon
+      os.symbols.Macos = "";
+    };
   };
 
   # Per-project environments
