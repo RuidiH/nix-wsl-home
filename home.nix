@@ -32,17 +32,19 @@
 
   programs.starship = {
     enable = true;
-    settings = builtins.fromTOML (builtins.readFile (
-      pkgs.fetchurl {
-          url = "https://starship.rs/presets/toml/tokyo-night.toml";
-          sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
-        }
-    ));
-    in
-    lib.recursiveUpdate preset {
-      # Override macos icon
-      os.symbols.Macos = "";
-    };
+    settings = 
+      let
+        preset = builtins.fromTOML (builtins.readFile ( 
+          pkgs.fetchurl {
+            url = "https://starship.rs/presets/toml/tokyo-night.toml";
+            sha256 = "sha256-eSIlVW89801BlI5d1VpAd2l2AX5trG43o1s62931uzE=";
+          }
+        ));
+      in
+      lib.recursiveUpdate preset {
+        # Override macos icon
+        os.symbols.Macos = "";
+      };
   };
 
   # Per-project environments
