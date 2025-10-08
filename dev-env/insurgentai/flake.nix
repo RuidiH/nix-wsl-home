@@ -42,17 +42,22 @@
             # uv 
             set -eu
             PROJECT_DIR="back-end"
-
-            export UV_PYTHON_DOWNLOADS=1
             
+            # allow uv to download python if cannot find one
+            export UV_PYTHON_DOWNLOADS=1
+           
+            # create virtual environment once
             if [ ! -d "$PROJECT_DIR/.venv" ]; then
               uv venv --project "$PROJECT_DIR" --python 3.12 --seed
             fi
-
+            
+            # activate venv, prepends .../.venv/bin to path
             . "$PROJECT_DIR/.venv/bin/activate"
 
+            # sync dependencies
             if [ -f "$PROJECT_DIR/uv.lock" ]; then
-              uv sync --project "$PROJECT_DIR" --frozen
+              # if locked, don't change version, use the exact lock
+              uv sync --project "$PROJECT_DIR" --frozen 
             else 
               uv sync --project "$PROJECT_DIR"
             fi
