@@ -30,7 +30,7 @@
 
   # (Optional) To make zsh the default shell, run: chsh -s $(which zsh)
 
-{
+
 programs.starship = {
   enable = true;
   enableZshIntegration = true;
@@ -51,7 +51,7 @@ programs.starship = {
     };
   };
 };
-}
+
 
   # Per-project environments
   programs.direnv = {
