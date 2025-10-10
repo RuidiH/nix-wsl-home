@@ -61,9 +61,9 @@
             # sync dependencies
             if [ -f "$PROJECT_DIR/uv.lock" ]; then
               # if locked, don't change version, use the exact lock
-              uv sync --project "$PROJECT_DIR" --frozen 
+              uv sync --project "$PROJECT_DIR" --frozen --all-groups --all-extras
             else 
-              uv sync --project "$PROJECT_DIR"
+              uv sync --project "$PROJECT_DIR" --all-groups --all-extras
             fi
           '';
 
