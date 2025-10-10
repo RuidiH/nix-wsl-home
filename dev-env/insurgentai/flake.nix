@@ -19,7 +19,6 @@
         toolPkgs = with pkgs; [
             uv
             gcc 
-            # python312
           ];
       in
       {
@@ -33,11 +32,13 @@
           # Python isolation for uv
           shellHook = ''
             # Claude code env
-            unset PYTHONPATH PYTHONHOME
             export AWS_REGION="us-west-2"
             export CLAUDE_CODE_USE_BEDROCK=1
             export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
             export MAX_THINKING_TOKENS=1024
+            export AWS_PROFILE="insurgent"
+
+            unset PYTHONPATH PYTHONHOME
 
             # uv 
             set -eu
