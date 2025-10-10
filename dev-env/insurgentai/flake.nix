@@ -38,6 +38,9 @@
             export MAX_THINKING_TOKENS=1024
             export AWS_PROFILE="insurgent"
 
+            # Use port 443 so library wifi doesn't block ssh
+            export GIT_SSH_COMMAND='ssh -o Hostname=ssh.github.com -o Port=443 -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
+
             unset PYTHONPATH PYTHONHOME
 
             # uv 
