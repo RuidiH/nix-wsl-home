@@ -10,9 +10,24 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        python = pkgs.python313.withPackages (ps: with ps; [
+          # From pyproject.toml
+          openai
+          pydantic
+          networkx
+          numpy
+          scikit-learn
+          tiktoken
+          matplotlib
+          streamlit
+          pypdf
+          rank-bm25
+          pyvis
+        ]);
       in
       {
         devShells.default = pkgs.mkShell {
+          inherit packages;
           shellHook = ''
             export AWS_REGION="us-west-2"
             export CLAUDE_CODE_USE_BEDROCK=1
