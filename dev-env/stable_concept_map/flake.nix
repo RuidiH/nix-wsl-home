@@ -27,7 +27,7 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          inherit packages;
+          packages = [python];
           shellHook = ''
             export AWS_REGION="us-west-2"
             export CLAUDE_CODE_USE_BEDROCK=1
