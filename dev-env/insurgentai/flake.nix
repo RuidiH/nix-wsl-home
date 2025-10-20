@@ -19,6 +19,10 @@
         toolPkgs = with pkgs; [
             uv
             gcc 
+            pass
+            jq
+            gnupg
+            aws-vault
           ];
       in
       {
