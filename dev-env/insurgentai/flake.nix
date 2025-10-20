@@ -39,21 +39,21 @@
           set -euo pipefail
 
           # ========= Config you can tweak =========
-          TEMPLATE_ENV="\${TEMPLATE_ENV:-./back-end/src/services/.envs/.env.secrets.TEMPLATE}"
-          OUTPUT_ENV="\${OUTPUT_ENV:-./back-end/src/services/.envs/.env.secrets}"
+          TEMPLATE_ENV=''${TEMPLATE_ENV:-./back-end/src/services/.envs/.env.secrets.TEMPLATE}
+          OUTPUT_ENV=''${OUTPUT_ENV:-./back-end/src/services/.envs/.env.secrets}
 
           # aws-vault backend + base profile (the one you did `aws-vault add <name>` for)
-          export AWS_VAULT_BACKEND="\${AWS_VAULT_BACKEND:-pass}"
-          AWS_BASE_PROFILE="\${AWS_BASE_PROFILE:-insurgent}"   # <- string, not exported
-          AWS_SESSION_DURATION="\${AWS_SESSION_DURATION:-12h}"
+          export AWS_VAULT_BACKEND=''${AWS_VAULT_BACKEND:-pass}
+          AWS_BASE_PROFILE=''${AWS_BASE_PROFILE:-insurgent}
+          AWS_SESSION_DURATION=''${AWS_SESSION_DURATION:-12h}
 
           # Default region
-          export AWS_DEFAULT_REGION="\${AWS_DEFAULT_REGION:-us-west-2}"
+          export AWS_DEFAULT_REGION=''${AWS_DEFAULT_REGION:-us-west-2}
           export AWS_REGION="$AWS_DEFAULT_REGION"
 
           # App-facing profile that uses credential_process in ~/.aws/config
           # Keep this as the global default so CLI/SDKs work automatically.
-          export AWS_PROFILE="\${AWS_PROFILE:-insurgent-app}"
+          export AWS_PROFILE=''${AWS_PROFILE:-insurgent-app}
 
           # ========= Sanity checks =========
           if [ ! -f "$TEMPLATE_ENV" ]; then
