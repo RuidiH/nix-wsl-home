@@ -23,7 +23,7 @@
             jq
             gnupg
             aws-vault
-            jupyterlab
+            python312Packages.jupyterlab
           ];
       in
       {
