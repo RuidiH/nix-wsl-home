@@ -23,6 +23,7 @@
             jq
             gnupg
             aws-vault
+            jupyterlab
           ];
       in
       {
