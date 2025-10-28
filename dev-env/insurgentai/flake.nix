@@ -77,27 +77,57 @@
             return 1
           fi
 
-          # ========= Build .env from template (replace only AWS lines) =========
-          TMP="$OUTPUT_ENV.tmp"
+          # ========= Update AWS credentials (preserve other secrets) =========
           esc() { printf '%s' "$1" | sed -e 's/[\\/&]/\\&/g'; }
 
-          sed \
-            -e "s/^AWS_ACCESS_KEY_ID *= *\".*\"/AWS_ACCESS_KEY_ID=\"$(esc "$AKID")\"/" \
-            -e "s/^AWS_SECRET_ACCESS_KEY *= *\".*\"/AWS_SECRET_ACCESS_KEY=\"$(esc "$SAK")\"/" \
-            "$TEMPLATE_ENV" > "$TMP"
+          if [ -f "$OUTPUT_ENV" ]; then
+            # File exists - update AWS credentials in-place
+            # This preserves POSTGRES_PASSWORD, MEMGRAPH_PASSWORD, etc.
 
-          # Append token & region (template doesn't have them)
-          {
-            echo ""
-            echo "# --- appended by devShell on $(date -Iseconds) ---"
-            echo "AWS_SESSION_TOKEN=\"$STS\""
-            echo "AWS_REGION=\"$AWS_REGION\""
-            echo "AWS_DEFAULT_REGION=\"$AWS_REGION\""
-            echo "# Expires: $EXP"
-          } >> "$TMP"
+            sed -i \
+              -e "s|^AWS_ACCESS_KEY_ID *= *\".*\"|AWS_ACCESS_KEY_ID=\"$(esc "$AKID")\"|" \
+              -e "s|^AWS_SECRET_ACCESS_KEY *= *\".*\"|AWS_SECRET_ACCESS_KEY=\"$(esc "$SAK")\"|" \
+              "$OUTPUT_ENV"
 
-          mv "$TMP" "$OUTPUT_ENV"
-          echo "[aws] Wrote short-lived AWS creds to $OUTPUT_ENV (expires: $EXP)"
+            # Handle AWS_SESSION_TOKEN - update if exists, append if not
+            if grep -q "^AWS_SESSION_TOKEN=" "$OUTPUT_ENV"; then
+              sed -i "s|^AWS_SESSION_TOKEN *= *\".*\"|AWS_SESSION_TOKEN=\"$(esc "$STS")\"|" "$OUTPUT_ENV"
+            else
+              # Add session token with timestamp
+              {
+                echo ""
+                echo "# --- AWS session credentials (auto-updated by devShell) ---"
+                echo "AWS_SESSION_TOKEN=\"$STS\""
+                echo "# Expires: $EXP"
+              } >> "$OUTPUT_ENV"
+            fi
+
+            # Update expiry comment if it exists
+            sed -i "s|^# Expires:.*|# Expires: $EXP|" "$OUTPUT_ENV"
+
+            echo "[aws] Updated AWS credentials in $OUTPUT_ENV (expires: $EXP)"
+
+          else
+            # First time setup - create from template
+            sed \
+              -e "s/^AWS_ACCESS_KEY_ID *= *\".*\"/AWS_ACCESS_KEY_ID=\"$(esc "$AKID")\"/" \
+              -e "s/^AWS_SECRET_ACCESS_KEY *= *\".*\"/AWS_SECRET_ACCESS_KEY=\"$(esc "$SAK")\"/" \
+              "$TEMPLATE_ENV" > "$OUTPUT_ENV"
+
+            # Add session token
+            {
+              echo ""
+              echo "# --- AWS session credentials (auto-updated by devShell) ---"
+              echo "AWS_SESSION_TOKEN=\"$STS\""
+              echo "# Expires: $EXP"
+            } >> "$OUTPUT_ENV"
+
+            echo "[aws] Created $OUTPUT_ENV from template (expires: $EXP)"
+            echo "[aws] ⚠️  Please manually set: POSTGRES_PASSWORD, MEMGRAPH_PASSWORD"
+          fi
+
+          # NOTE: AWS_REGION is NOT written here - it's controlled by .env.aws
+          # This allows different projects to use different regions
 
           # ========= Claude / Bedrock env (no profile collisions) =========
           # Make Claude Code (and any child process) see Bedrock creds
