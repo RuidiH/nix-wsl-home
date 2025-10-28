@@ -39,6 +39,7 @@
           # Set region for local shell (Docker containers read from .env.aws)
           export AWS_DEFAULT_REGION=''${AWS_DEFAULT_REGION:-us-west-2}
           export AWS_REGION="$AWS_DEFAULT_REGION"
+          export AWS_PROFILE=insurgent
 
           # ========= Claude Code feature flags =========
           export CLAUDE_CODE_USE_BEDROCK=1
