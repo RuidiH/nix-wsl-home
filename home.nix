@@ -80,6 +80,7 @@ programs.starship = {
     claude-code
     docker-compose
     opentofu
+    jq
   ] ++ pkgs.lib.optionals isWSL [
     wslu # Only on WSL for wslview command
   ];
