@@ -10,7 +10,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         # pkgs = nixpkgs.legacyPackages.${system};
-        lib = nixkpgs.lib;
+        lib = nixpkgs.lib;
         pkgs = import nixpkgs {
           inherit system;
           config = {
