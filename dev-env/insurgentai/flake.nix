@@ -20,6 +20,7 @@
             uv
             gcc
             jq
+            redisinsight
           ];
       in
       {
