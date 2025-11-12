@@ -9,7 +9,15 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        # pkgs = nixpkgs.legacyPackages.${system};
+        lib = nixkpgs.lib;
+        pkgs = import nixpkgs {
+          inherit system;
+          config = {
+            # allow only this unfree package
+            allowUnfreePredicate = pkg: lib.getName pkg == "redisinsight";
+          };
+        };
         runtimeLibs = with pkgs; [
           stdenv.cc.cc.lib
           # glibc
