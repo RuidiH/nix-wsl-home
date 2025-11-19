@@ -29,6 +29,7 @@
             gcc
             jq
             redisinsight
+            nodejs_20
           ];
       in
       {
@@ -82,6 +83,18 @@
 
           # Optional: warm AWS credential_process cache so first CLI call is snappy
           aws sts get-caller-identity >/dev/null 2>&1 || true
+
+          # ========= Node.js (npm) bootstrap =========
+          FRONTEND_DIR="front-end/kg-chatbot"
+          
+          if [ -d "$FRONTEND_DIR" ] && [ -f "$FRONTEND_DIR/package-lock.json" ]; then
+            pushd "$FRONTEND_DIR" > /dev/null
+            if [ ! -d "node_modules" ]; then
+              echo "Installing frontend dependencies..."
+              npm ci --silent
+            fi
+            popd > /dev/null
+          fi
           # --- END shellHook ---
           '';
 
